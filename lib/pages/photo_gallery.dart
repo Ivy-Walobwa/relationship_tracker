@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/photo.dart';
-import '../data/Istages.dart';
-import '../data/fake_data.dart';
+import '../models/Istages.dart';
+import '../fake_data.dart';
 
 class PhotoGallery extends StatefulWidget {
   @override

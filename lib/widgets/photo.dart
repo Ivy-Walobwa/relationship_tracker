@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../data/Istages.dart';
+import '../models/Istages.dart';
 
 class Photo extends StatelessWidget {
   Photo(
