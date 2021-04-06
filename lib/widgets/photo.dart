@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import '../models/Istages.dart';
+import '../pages/photo_gallery.dart';
 
 class Photo extends StatelessWidget {
   Photo(
-      {@required this.stage,
-      this.onLongPress,
-      this.onSelected,
-      this.selectable, });
+      {@required this.stage,});
 
   final IStages stage;
-  final bool selectable;
-  final Function onLongPress;
-  final Function onSelected;
+
+
 
   @override
   Widget build(BuildContext context) {
+    final container = PhotoGallery.of(context);
     return Stack(
       children: [
         GestureDetector(
@@ -33,9 +31,9 @@ class Photo extends StatelessWidget {
               ),
             ),
           ),
-          onLongPress: () => onLongPress(stage.url),
+          onLongPress: () => container.toggleTagging(stage.url),
         ),
-        if(selectable)
+        if(container.isTagging)
         Positioned(
           child: Theme(
             data: Theme.of(context).copyWith(unselectedWidgetColor: Colors.grey),
@@ -44,7 +42,7 @@ class Photo extends StatelessWidget {
               activeColor: Colors.white,
               checkColor: Colors.black,
               onChanged: (value) {
-                onSelected(stage.url, value);
+                container.onPhotoSelect(stage.url, value);
                 if(stage.selected){
                   stage.tag.add('completed');
                 }else{
