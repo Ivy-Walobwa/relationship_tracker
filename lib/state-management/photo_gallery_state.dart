@@ -1,8 +1,8 @@
-import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter/cupertino.dart';
 import '../models/Istages.dart';
 import '../fake_data.dart';
 
-class PhotoGalleryState extends Model {
+class PhotoGalleryState extends ChangeNotifier {
   List<IStages> _stagesList =
   imageListUrl.map<IStages>((json) => IStages.fromJson(json)).toList();
 

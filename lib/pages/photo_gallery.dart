@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
 import '../widgets/photo.dart';
 import '../state-management/photo_gallery_state.dart';
+import 'package:provider/provider.dart';
 
 class PhotoGallery extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<PhotoGalleryState>(
-      builder: (context, child,  model) {
-        var tags = model.tags;
-        var stagesList = model.stagesList;
-        return DefaultTabController(
+
+    var tags = context.watch<PhotoGalleryState>().tags;
+    var stagesList = context.read<PhotoGalleryState>().stagesList;
+    return DefaultTabController(
           length: 2,
           child: Scaffold(
             appBar: AppBar(
@@ -44,7 +43,6 @@ class PhotoGallery extends StatelessWidget {
             ),
           ),
         );
-      }
-    );
+
   }
 }

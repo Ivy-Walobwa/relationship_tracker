@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
 import '../models/Istages.dart';
 import '../state-management/photo_gallery_state.dart';
+import 'package:provider/provider.dart';
 
 class Photo extends StatelessWidget {
   Photo(
@@ -11,9 +11,8 @@ class Photo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<PhotoGalleryState>(
-      builder: (context, child, model) {
-        return Stack(
+
+    return Stack(
           children: [
             GestureDetector(
               child: Card(
@@ -31,9 +30,9 @@ class Photo extends StatelessWidget {
                   ),
                 ),
               ),
-              onLongPress: () => model.toggleTagging(stage.url),
+              onLongPress: () => context.read<PhotoGalleryState>().toggleTagging(stage.url),
             ),
-            if(model.isTagging)
+            if(context.watch<PhotoGalleryState>().isTagging)
             Positioned(
               child: Theme(
                 data: Theme.of(context).copyWith(unselectedWidgetColor: Colors.grey),
@@ -42,7 +41,7 @@ class Photo extends StatelessWidget {
                   activeColor: Colors.white,
                   checkColor: Colors.black,
                   onChanged: (value) {
-                    model.onPhotoSelect(stage.url, value);
+                    context.read<PhotoGalleryState>().onPhotoSelect(stage.url, value);
                     if(stage.selected){
                       stage.tag.add('completed');
                     }else{
@@ -56,7 +55,6 @@ class Photo extends StatelessWidget {
             )
           ],
         );
-      }
-    );
+
   }
 }
