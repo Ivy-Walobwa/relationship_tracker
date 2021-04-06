@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 import '../models/Istages.dart';
-import '../pages/photo_gallery.dart';
+import '../state-management/photo_gallery_state.dart';
 
 class Photo extends StatelessWidget {
   Photo(
@@ -8,53 +9,54 @@ class Photo extends StatelessWidget {
 
   final IStages stage;
 
-
-
   @override
   Widget build(BuildContext context) {
-    final container = PhotoGallery.of(context);
-    return Stack(
-      children: [
-        GestureDetector(
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.network(stage.url),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(stage.stage),
-                  )
-                ],
+    return ScopedModelDescendant<PhotoGalleryState>(
+      builder: (context, child, model) {
+        return Stack(
+          children: [
+            GestureDetector(
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.network(stage.url),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(stage.stage),
+                      )
+                    ],
+                  ),
+                ),
               ),
+              onLongPress: () => model.toggleTagging(stage.url),
             ),
-          ),
-          onLongPress: () => container.toggleTagging(stage.url),
-        ),
-        if(container.isTagging)
-        Positioned(
-          child: Theme(
-            data: Theme.of(context).copyWith(unselectedWidgetColor: Colors.grey),
-            child: Checkbox(
-              value: stage.selected,
-              activeColor: Colors.white,
-              checkColor: Colors.black,
-              onChanged: (value) {
-                container.onPhotoSelect(stage.url, value);
-                if(stage.selected){
-                  stage.tag.add('completed');
-                }else{
-                  stage.tag.remove('completed');
-                }
-              },
-            ),
-          ),
-          left: 0,
-          top: 0,
-        )
-      ],
+            if(model.isTagging)
+            Positioned(
+              child: Theme(
+                data: Theme.of(context).copyWith(unselectedWidgetColor: Colors.grey),
+                child: Checkbox(
+                  value: stage.selected,
+                  activeColor: Colors.white,
+                  checkColor: Colors.black,
+                  onChanged: (value) {
+                    model.onPhotoSelect(stage.url, value);
+                    if(stage.selected){
+                      stage.tag.add('completed');
+                    }else{
+                      stage.tag.remove('completed');
+                    }
+                  },
+                ),
+              ),
+              left: 0,
+              top: 0,
+            )
+          ],
+        );
+      }
     );
   }
 }
